@@ -33,7 +33,7 @@ class NetteModel extends AbstractModel
 	public function getItemByUniqueId($uniqueId)
 	{
         $select = clone $this->selection;
-        return $select->where('?=?', $this->getPrimaryKey(), $uniqueId)
+        return $select->where($this->getPrimaryKey(), $uniqueId)
             ->fetch();
 	}
 
