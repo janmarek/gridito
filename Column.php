@@ -20,6 +20,10 @@ class Column extends \Nette\Application\UI\Control
 
 	/** @var int */
 	private $maxlen = null;
+
+	/** @var string */
+	private $type = 'string';
+
 	/** @var bool */
 	private $sortable = false;
 
@@ -120,6 +124,25 @@ class Column extends \Nette\Application\UI\Control
 		return $this->maxlen;
 	}
 
+	/**
+	 * Set the type of cell
+	 * @param string type
+	 * @return Column
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+		return $this;
+	}
+
+	/**
+	 * Get the type of cell
+	 * @return string type
+	 */
+	public function getType($type)
+	{
+		return $this->type;
+	}
 
 	/**
 	 * Is sortable?
@@ -240,7 +263,7 @@ class Column extends \Nette\Application\UI\Control
 		$value = $record->$name;
 
 		// boolean
-		if (is_bool($value)) {
+		if (in_array($this->type, array('bool', 'boolean')) || is_bool($value)) {
 			self::renderBoolean($value);
 
 		// date
