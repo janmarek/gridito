@@ -213,7 +213,7 @@ class Column extends \Nette\Application\UI\Control
 
 		// other
 		} else {
-			echo $value;
+			echo htmlspecialchars($value, ENT_NOQUOTES);
 		}
 	}
 
