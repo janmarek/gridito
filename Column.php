@@ -251,6 +251,21 @@ class Column extends \Nette\Application\UI\Control
 		}
 	}
 
+	/**
+	 * Render the email address, takes care of length
+	 * @param string $email  email address
+	 * @param int	 $maxlen maximum length of text
+	 */
+	public static function renderEmail($email, $maxlen)
+	{
+		$el = Html::el('a')->href('mailto:' . $email);
+		if (is_null($maxlen) || Strings::length($email) < $maxlen) {
+			echo $el->setText($email);
+		} else {
+			echo $el->title($email)
+				->setText(Strings::truncate($email, $maxlen));
+		}
+	}
 
 
 	/**
@@ -269,6 +284,10 @@ class Column extends \Nette\Application\UI\Control
 		// date
 		} elseif ($value instanceof \DateTime) {
 			self::renderDateTime($value, $this->dateTimeFormat);
+
+		// email
+		} elseif ($this->type == 'email') {
+			self::renderEmail($value, $this->maxlen);
 
 		// other
 		} else {
