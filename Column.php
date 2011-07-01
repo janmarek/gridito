@@ -12,13 +12,13 @@ use Nette\Utils\Html;
  */
 class Column extends \Nette\Application\UI\Control
 {
-    // <editor-fold defaultstate="collapsed" desc="variables">
+	// <editor-fold defaultstate="collapsed" desc="variables">
 
-    /** @var string */
-    private $label;
+	/** @var string */
+	private $label;
 
-    /** @var callback */
-    private $renderer = null;
+	/** @var callback */
+	private $renderer = null;
 
 	/** @var int */
 	private $maxlen = null;
@@ -29,11 +29,11 @@ class Column extends \Nette\Application\UI\Control
 	/** @var bool */
 	private $sortable = false;
 
-    /** @var string */
-    private $type = 'string';
+	/** @var string */
+	private $dateTimeFormat = "j.n.Y G:i";
 
-    /** @var bool */
-    private $sortable = false;
+	/** @var string|callable */
+	private $cellClass = null;
 
 	/** @var string */
 	private $format = null;
