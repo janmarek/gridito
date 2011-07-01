@@ -2,7 +2,6 @@
 
 namespace Gridito;
 
-use DibiFluent;
 use Nette\Database\Table\Selection;
 
 /**
