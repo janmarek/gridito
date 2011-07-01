@@ -6,29 +6,24 @@ use DibiFluent;
 use Nette\Database\Table\Selection;
 
 /**
- * DibiFluent model
+ * Nette\Database model
  *
- * @author Jan Marek
+ * @author Samuel Hapak
  * @license MIT
  */
 class NetteModel extends AbstractModel
 {
-    /** @var Connection */
+    /** @var Nette\Database\Table\Selection */
     private $selection;
-
-
 
 	/**
 	 * Constructor
-	 * @param Connection $connection to db
-	 * @param string     $table name
+	 * @param Selection $selection
 	 */
 	public function __construct(Selection $selection)
 	{
         $this->selection = $selection;
 	}
-
-
 
 	public function getItemByUniqueId($uniqueId)
 	{
@@ -36,8 +31,6 @@ class NetteModel extends AbstractModel
         return $select->where($this->getPrimaryKey(), $uniqueId)
             ->fetch();
 	}
-
-
 
 	public function getItems()
 	{
@@ -50,7 +43,6 @@ class NetteModel extends AbstractModel
         return $select->limit($this->getLimit(), $this->getOffset())
             ->fetchPairs($this->getPrimaryKey());
 	}
-
 
 
 	/**
