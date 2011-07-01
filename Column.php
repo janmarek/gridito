@@ -1,6 +1,8 @@
 <?php
 
 namespace Gridito;
+use Nette\Utils\Strings;
+use Nette\Utils\Html;
 
 /**
  * Grid column
