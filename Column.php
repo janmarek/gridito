@@ -35,6 +35,9 @@ class Column extends \Nette\Application\UI\Control
 	/** @var string|callable */
 	private $cellClass = null;
 
+	/** @var string */
+	private $format = null;
+
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="getters & setters">
@@ -144,6 +147,26 @@ class Column extends \Nette\Application\UI\Control
 	public function getType($type)
 	{
 		return $this->type;
+	}
+
+	/**
+	 * Set format of the cell
+	 * @param mixed format
+	 * @return Column
+	 */
+	public function setFormat($format)
+	{
+		$this->format = $format;
+		return $this;
+	}
+
+	/**
+	 * Get the format
+	 * @return mixed
+	 */
+	public function getFormat()
+	{
+		return $this->format;
 	}
 
 	/**
@@ -293,6 +316,9 @@ class Column extends \Nette\Application\UI\Control
 
 		// other
 		} else {
+			if (!is_null($this->format)) {
+				$value = Grid::formatRecordString($record, $this->format);
+			}
 			self::renderText($value, $this->maxlen);
 		}
 	}
