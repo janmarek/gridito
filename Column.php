@@ -18,6 +18,8 @@ class Column extends \Nette\Application\UI\Control
 	/** @var callback */
 	private $renderer = null;
 
+	/** @var int */
+	private $maxlen = null;
 	/** @var bool */
 	private $sortable = false;
 
@@ -33,7 +35,7 @@ class Column extends \Nette\Application\UI\Control
 
 	public function setCellClass($class)
 	{
-	    $this->cellClass = $class;
+		$this->cellClass = $class;
 		return $this;
 	}
 
@@ -98,6 +100,25 @@ class Column extends \Nette\Application\UI\Control
 		return $this;
 	}
 
+	/**
+	 * Set maximal length of cell
+	 * @param $maxlen
+	 * @return Column
+	 */
+	public function setLength($maxlen)
+	{
+		$this->maxlen = $maxlen;
+		return $this;
+	}
+
+	/**
+	 * Get maximal length of cell
+	 * @return int
+	 */
+	public function getLength()
+	{
+		return $this->maxlen;
+	}
 
 
 	/**
@@ -192,6 +213,21 @@ class Column extends \Nette\Application\UI\Control
 		echo $value->format($format);
 	}
 
+	/**
+	 * Render the text, takes care of length
+	 * @param string $text	 text to render
+	 * @param int	 $maxlen maximum length of text
+	 */
+	public static function renderText($text, $maxlen)
+	{
+		if (is_null($maxlen) || Strings::length($text) < $maxlen) {
+			echo htmlspecialchars($text, ENT_NOQUOTES);
+		} else {
+			echo Html::el('span')->title($text)
+				->setText(Strings::truncate($text, $maxlen));
+		}
+	}
+
 
 
 	/**
@@ -213,7 +249,7 @@ class Column extends \Nette\Application\UI\Control
 
 		// other
 		} else {
-			echo htmlspecialchars($value, ENT_NOQUOTES);
+			self::renderText($value, $this->maxlen);
 		}
 	}
 
