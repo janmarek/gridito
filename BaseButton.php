@@ -239,11 +239,29 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	 */
 	protected function createButton($row = null)
 	{
+        $button = Html::el('a')->href($this->getLink($row));
+        $button->class[] = 'gridito-button';
+        if ($this->icon && $this->showText) {
+            $button->class[] = 'button-icon-text';
+        } elseif ($this->icon) {
+            $button->class[] = 'button-icon';
+            $button->class[] = 'gridito-hide-text';
+            $button->title($this->label);
+        } else {
+            $button->class[] = 'button-text';
+        }
+
+        if ($this->icon)  {
+            $button->create('span')->class(array('gridito-icon', $this->icon));
+        } 
+        $button->create('span class="gridito-text"')->setText($this->label);
+        return $button;
+
 		return Html::el("a")
 			->href($this->getLink($row))
 			->data("gridito-icon", $this->icon)
-			->class(array("gridito-button", $this->showText ? null : "gridito-hide-text"))
-			->setText($this->label);
+			->class(array("gridito-button js-disabled", $this->showText ? null : "gridito-hide-text"))
+			->add(Html::el('span')->setText($this->label));
 	}
 
 	

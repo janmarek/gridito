@@ -1,6 +1,8 @@
 <?php
 
 namespace Gridito;
+use Nette\Utils\Strings;
+use Nette\Utils\Html;
 
 /**
  * Grid column
@@ -18,6 +20,12 @@ class Column extends \Nette\Application\UI\Control
 	/** @var callback */
 	private $renderer = null;
 
+	/** @var int */
+	private $maxlen = null;
+
+	/** @var string */
+	private $type = 'string';
+
 	/** @var bool */
 	private $sortable = false;
 
@@ -27,13 +35,16 @@ class Column extends \Nette\Application\UI\Control
 	/** @var string|callable */
 	private $cellClass = null;
 
+	/** @var string */
+	private $format = null;
+
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	public function setCellClass($class)
 	{
-	    $this->cellClass = $class;
+		$this->cellClass = $class;
 		return $this;
 	}
 
@@ -98,7 +109,65 @@ class Column extends \Nette\Application\UI\Control
 		return $this;
 	}
 
+	/**
+	 * Set maximal length of cell
+	 * @param $maxlen
+	 * @return Column
+	 */
+	public function setLength($maxlen)
+	{
+		$this->maxlen = $maxlen;
+		return $this;
+	}
 
+	/**
+	 * Get maximal length of cell
+	 * @return int
+	 */
+	public function getLength()
+	{
+		return $this->maxlen;
+	}
+
+	/**
+	 * Set the type of cell
+	 * @param string type
+	 * @return Column
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+		return $this;
+	}
+
+	/**
+	 * Get the type of cell
+	 * @return string type
+	 */
+	public function getType($type)
+	{
+		return $this->type;
+	}
+
+	/**
+	 * Set format of the cell
+	 * @param mixed format
+	 * @return Column
+	 */
+	public function setFormat($format)
+	{
+		$this->format = $format;
+		return $this;
+	}
+
+	/**
+	 * Get the format
+	 * @return mixed
+	 */
+	public function getFormat()
+	{
+		return $this->format;
+	}
 
 	/**
 	 * Is sortable?
@@ -192,6 +261,36 @@ class Column extends \Nette\Application\UI\Control
 		echo $value->format($format);
 	}
 
+	/**
+	 * Render the text, takes care of length
+	 * @param string $text	 text to render
+	 * @param int	 $maxlen maximum length of text
+	 */
+	public static function renderText($text, $maxlen)
+	{
+		if (is_null($maxlen) || Strings::length($text) < $maxlen) {
+			echo htmlspecialchars($text, ENT_NOQUOTES);
+		} else {
+			echo Html::el('span')->title($text)
+				->setText(Strings::truncate($text, $maxlen));
+		}
+	}
+
+	/**
+	 * Render the email address, takes care of length
+	 * @param string $email  email address
+	 * @param int	 $maxlen maximum length of text
+	 */
+	public static function renderEmail($email, $maxlen)
+	{
+		$el = Html::el('a')->href('mailto:' . $email);
+		if (is_null($maxlen) || Strings::length($email) < $maxlen) {
+			echo $el->setText($email);
+		} else {
+			echo $el->title($email)
+				->setText(Strings::truncate($email, $maxlen));
+		}
+	}
 
 
 	/**
@@ -204,16 +303,23 @@ class Column extends \Nette\Application\UI\Control
 		$value = $record->$name;
 
 		// boolean
-		if (is_bool($value)) {
+		if (in_array($this->type, array('bool', 'boolean')) || is_bool($value)) {
 			self::renderBoolean($value);
 
 		// date
 		} elseif ($value instanceof \DateTime) {
 			self::renderDateTime($value, $this->dateTimeFormat);
 
+		// email
+		} elseif ($this->type == 'email') {
+			self::renderEmail($value, $this->maxlen);
+
 		// other
 		} else {
-			echo $value;
+			if (!is_null($this->format)) {
+				$value = Grid::formatRecordString($record, $this->format);
+			}
+			self::renderText($value, $this->maxlen);
 		}
 	}
 

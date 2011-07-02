@@ -3,6 +3,7 @@
 namespace Gridito;
 
 use Nette\ComponentModel\Container, Nette\Environment, Nette\Utils\Paginator;
+use Nette\Utils\Strings;
 
 /**
  * Grid
@@ -64,6 +65,15 @@ class Grid extends \Nette\Application\UI\Control
 
 		$this->paginator = new Paginator;
 		$this->paginator->setItemsPerPage($this->defaultItemsPerPage);
+	}
+
+	public static function formatRecordString($record, $formatString)
+	{
+		return Strings::replace($formatString, '#%[^%]*%#u',
+			function ($m) use ($record) {
+				$m = Strings::trim($m[0], '%');
+				return $m != '' ? $record[$m] : "%";
+			});
 	}
 
 	// </editor-fold>

@@ -52,7 +52,7 @@ class Button extends BaseButton
 		if (is_callable($this->confirmationQuestion)) {
 			return call_user_func($this->confirmationQuestion, $row);
 		} else {
-			return $this->confirmationQuestion;
+			return Grid::formatRecordString($row, $this->confirmationQuestion);
 		}
 	}
 
