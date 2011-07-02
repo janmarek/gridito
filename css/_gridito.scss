@@ -1,3 +1,4 @@
+@import '_jquery.ui.scss';
 /**
  * Gridito CSS
  */
@@ -24,40 +25,105 @@ div.gridito-flash .ui-icon {
 .gridito-table {
 	border-collapse: collapse;
 	width: 100%;
+    @extend .ui-widget;
+    @extend .ui-widget-content;
+    th {
+        padding: 0.5em;
+        text-align: left;
+        @extend .ui-widget-header;
+        .gridito-sorting {
+            float:right;
+            margin-left: 0.5em;
+            position: relative;
+            top: 0.2em;
+            .sorting-no, .sorting-asc, .sorting-desc {
+                @extend .ui-icon;
+            }
+            .sorting-no {
+                opacity: 0.5;
+                &:hover {
+                    opacity: 1;
+                }
+            }
+            .sorting-no, .sorting-desc:hover {
+                @extend .ui-icon-carat-2-n-s;
+            }
+            .sorting-asc, .sorting-no:hover {
+                @extend .ui-icon-triangle-1-n;
+            }
+            .sorting-desc, .sorting-asc:hover {
+                @extend .ui-icon-triangle-1-s;
+            }
+        }
+        &:hover .gridito-sorting .sorting-no {
+            opacity: 1;
+        }
+    }
+    tbody tr:hover {
+        @extend .ui-state-hover;
+    }
 }
 .gridito-table th {
-	padding: 0.5em;
-	text-align: left;
 }
 .gridito-table td {
 	padding: 0.5em;
 	border: 1px solid #BBB;
-}
-.gridito-table .ui-state-hover .gridito-cell {
-	font-weight: normal;
-}
-.gridito-actioncell .ui-button {
-	margin: 0 0.5em 0 0;
-}
-.gridito-actioncell .ui-button:first-child {
-	margin-left: 0;
-}
-.gridito-actioncell {
-	text-align: center;
+    &.highlight {
+        @extend .ui-state-highlight;
+    }
 }
 
-/* th */
-.gridito-table th .gridito-sorting {
-	float:right;
-	margin-left: 0.5em;
-	position: relative;
-	top: 0.2em;
+.gridito-table tr {
+    max-height: 2ex;
 }
-.gridito-table th .gridito-sorting .ui-icon {
-	opacity: 0.5
+
+.gridito-button {
+    @extend .ui-button;
+    @extend .ui-widget;
+    @extend .ui-state-default;
+    @extend .ui-corner-all;
+
+    &.button-text {
+        @extend .ui-button-text-only;
+    }
+    &.button-icon {
+        @extend .ui-button-icon-only;
+    }
+    &.button-icon-text {
+        @extend .ui-button-text-icon-primary;
+    }
+    &.disabled {
+        @extend .ui-button-disabled;
+        @extend .ui-state-disabled;
+    }
+    &:hover {
+        @extend .ui-state-hover;
+    }
+    &:active {
+        @extend .ui-state-active;
+    }
+    &:focus {
+        @extend .ui-state-focus;
+    }
 }
-.gridito-table th:hover .gridito-sorting .ui-icon, .gridito-table th .gridito-sorting .ui-icon.ui-icon-triangle-1-s, .gridito-table th .gridito-sorting .ui-icon.ui-icon-triangle-1-n {
-	opacity: 1
+span.gridito-icon {
+    @extend .ui-button-icon-primary;
+    @extend .ui-icon;
+}
+span.gridito-text {
+    @extend .ui-button-text;
+}
+.gridito-table .ui-state-hover .gridito-cell {
+font-weight: normal;
+}
+.gridito-actioncell .ui-button {
+margin: 0 0.5em 0 0;
+}
+.gridito-actioncell .ui-button:first-child {
+margin-left: 0;
+}
+.gridito-actioncell {
+text-align: center;
 }
 
 /* paginator */
