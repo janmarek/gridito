@@ -50,7 +50,7 @@ class NetteModel extends AbstractModel
 	 */
 	protected function _count()
 	{
-		return $this->selection->count();
+		return $this->selection->count('*');
 	}
 
 }
