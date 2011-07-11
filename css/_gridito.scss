@@ -99,7 +99,7 @@ div.gridito-flash .ui-icon {
     &:hover {
         @extend .ui-state-hover;
     }
-    &:active {
+    &:active, &.checked {
         @extend .ui-state-active;
     }
     &:focus {

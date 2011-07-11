@@ -335,6 +335,21 @@ class Grid extends \Nette\Application\UI\Control
 		return $button;
 	}
 
+	/**
+	 * Add check button
+	 * @param string button name
+	 * @param string label
+	 * @param array options
+	 * @return CheckButton
+	 */
+	public function addCheckButton($name, $label = null, array $options = array())
+	{
+		$button = new CheckButton($this["actions"], $name);
+		$button->setLabel($label);
+		$this->setOptions($button, $options);
+		return $button;
+	}
+
 
 
 	/**
