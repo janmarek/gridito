@@ -256,12 +256,6 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
         } 
         $button->create('span class="gridito-text"')->setText($this->label);
         return $button;
-
-		return Html::el("a")
-			->href($this->getLink($row))
-			->data("gridito-icon", $this->icon)
-			->class(array("gridito-button js-disabled", $this->showText ? null : "gridito-hide-text"))
-			->add(Html::el('span')->setText($this->label));
 	}
 
 	
