@@ -246,7 +246,7 @@ class Column extends \Nette\Application\UI\Control
 	public static function renderBoolean($value)
 	{
 		$icon = $value ? "check" : "closethick";
-		echo '<span class="ui-icon ui-icon-' . $icon . '"></span>';
+		return '<span class="ui-icon ui-icon-' . $icon . '"></span>';
 	}
 
 
@@ -258,7 +258,7 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public static function renderDateTime($value, $format)
 	{
-		echo $value->format($format);
+		return $value->format($format);
 	}
 
 	/**
@@ -269,9 +269,9 @@ class Column extends \Nette\Application\UI\Control
 	public static function renderText($text, $maxlen)
 	{
 		if (is_null($maxlen) || Strings::length($text) < $maxlen) {
-			echo htmlspecialchars($text, ENT_NOQUOTES);
+			return htmlspecialchars($text, ENT_NOQUOTES);
 		} else {
-			echo Html::el('span')->title($text)
+			return Html::el('span')->title($text)
 				->setText(Strings::truncate($text, $maxlen));
 		}
 	}
@@ -280,14 +280,15 @@ class Column extends \Nette\Application\UI\Control
 	 * Render the email address, takes care of length
 	 * @param string $email  email address
 	 * @param int	 $maxlen maximum length of text
+     * @return mixed
 	 */
 	public static function renderEmail($email, $maxlen)
 	{
 		$el = Html::el('a')->href('mailto:' . $email);
 		if (is_null($maxlen) || Strings::length($email) < $maxlen) {
-			echo $el->setText($email);
+			return $el->setText($email);
 		} else {
-			echo $el->title($email)
+			return $el->title($email)
 				->setText(Strings::truncate($email, $maxlen));
 		}
 	}
@@ -297,6 +298,7 @@ class Column extends \Nette\Application\UI\Control
 	 * Default cell renderer
 	 * @param mixed $record
 	 * @param Column $column
+     * @return mixed
 	 */
 	public function defaultCellRenderer($record, $column) {
 		$name = $column->getName();
@@ -304,22 +306,22 @@ class Column extends \Nette\Application\UI\Control
 
 		// boolean
 		if (in_array($this->type, array('bool', 'boolean')) || is_bool($value)) {
-			self::renderBoolean($value);
+			return self::renderBoolean($value);
 
 		// date
 		} elseif ($value instanceof \DateTime) {
-			self::renderDateTime($value, $this->dateTimeFormat);
+			return self::renderDateTime($value, $this->dateTimeFormat);
 
 		// email
 		} elseif ($this->type == 'email') {
-			self::renderEmail($value, $this->maxlen);
+			return self::renderEmail($value, $this->maxlen);
 
 		// other
 		} else {
 			if (!is_null($this->format)) {
 				$value = Grid::formatRecordString($record, $this->format);
 			}
-			self::renderText($value, $this->maxlen);
+			return self::renderText($value, $this->maxlen);
 		}
 	}
 
@@ -330,7 +332,7 @@ class Column extends \Nette\Application\UI\Control
 	 * @param mixed record
 	 */
 	public function renderCell($record) {
-		call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
+		echo call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
 	}
 
 }
