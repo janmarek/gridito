@@ -51,6 +51,9 @@ class Grid extends \Nette\Application\UI\Control
 	/** @var string|callable */
 	private $rowClass = null;
 
+    /** @var callable */
+    private $editHandler = null;
+
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="constructor">
@@ -259,6 +262,20 @@ class Grid extends \Nette\Application\UI\Control
 			$this->invalidateControl();
 		}
 	}
+
+    public function setEditHandler($callback)
+    {
+        $this->editHandler = $callback;
+    }
+
+    public function handleEdit()
+    {
+        if ($this->presenter->isAjax()) {
+            $post = \Nette\Environment::getHttpRequest()->getPost();
+            call_user_func($this->editHandler, $post);
+            $this->invalidateControl();
+        }
+    }
 
 
 

@@ -29,6 +29,9 @@ class Column extends \Nette\Application\UI\Control
 	/** @var bool */
 	private $sortable = false;
 
+	/** @var bool */
+	private $editable = false;
+
 	/** @var string */
 	private $dateTimeFormat = "j.n.Y G:i";
 
@@ -189,6 +192,16 @@ class Column extends \Nette\Application\UI\Control
 		return $this;
 	}
 
+	/**
+	 * Set editable
+	 * @param bool editable
+	 * @return Column
+	 */
+	public function setEditable($editable) {
+		$this->editable = $editable;
+		return $this;
+	}
+
 
 
 	/**
@@ -269,7 +282,7 @@ class Column extends \Nette\Application\UI\Control
 	public static function renderText($text, $maxlen)
 	{
 		if (is_null($maxlen) || Strings::length($text) < $maxlen) {
-			return htmlspecialchars($text, ENT_NOQUOTES);
+            return Html::el('span')->setText($text);
 		} else {
 			return Html::el('span')->title($text)
 				->setText(Strings::truncate($text, $maxlen));
@@ -321,7 +334,15 @@ class Column extends \Nette\Application\UI\Control
 			if (!is_null($this->format)) {
 				$value = Grid::formatRecordString($record, $this->format);
 			}
-			return self::renderText($value, $this->maxlen);
+			$return = self::renderText($value, $this->maxlen);
+            if ($this->editable) {
+                $return->class[] = 'editable';
+                $return->data['value'] = $value;
+                $return->data['url'] = $this->getGrid()->link('edit!');
+                $return->data['name'] = $this->getName();
+                $return->data['id'] = $this->getGrid()->getModel()->getUniqueId($record);
+            }
+            return $return;
 		}
 	}
 
