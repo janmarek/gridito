@@ -263,11 +263,20 @@ class Grid extends \Nette\Application\UI\Control
 		}
 	}
 
+    /**
+     * Set edit handler
+     * @param callback handler
+     * @return Grid
+     */
     public function setEditHandler($callback)
     {
         $this->editHandler = $callback;
+        return $this;
     }
 
+    /**
+     * Handle edit
+     */
     public function handleEdit()
     {
         if ($this->presenter->isAjax()) {
