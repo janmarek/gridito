@@ -202,6 +202,13 @@ class Column extends \Nette\Application\UI\Control
 		return $this;
 	}
 
+    /**
+	 * Is editable?
+	 * @return bool
+	 */
+	public function isEditable() {
+		return $this->editable;
+	}
 
 
 	/**
