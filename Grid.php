@@ -281,8 +281,14 @@ class Grid extends \Nette\Application\UI\Control
     {
         if ($this->presenter->isAjax()) {
             $post = \Nette\Environment::getHttpRequest()->getPost();
+            foreach ($post as $column => $value) {
+                if ($column == 'id' || 
+                    $this['columns']->getComponent($column)->isEditable()) {
+                    continue;
+                }
+                throw new \Nette\Application\ForbiddenRequestException("Column $column is not editable");
+            }
             call_user_func($this->editHandler, $post);
-            $this->invalidateControl();
         }
     }
 

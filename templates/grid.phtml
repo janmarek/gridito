@@ -13,12 +13,12 @@
         {block grid}
 
         {* flash messages *}
-        {block flashes}
+        {snippet flashes}
         <div n:class="gridito-flash, $flash->type === 'error' ? 'ui-state-error' : 'ui-state-highlight', ui-corner-all" n:foreach="$flashes as $flash">
             <span n:class="ui-icon, $flash->type === 'error' ? 'ui-icon-alert' : 'ui-icon-info'"></span>
             {$flash->message}
         </div>
-        {/block}
+        {/snippet}
 
         {* top toolbar *}
         {block toptoolbar}
