@@ -113,6 +113,12 @@ span.gridito-icon {
 span.gridito-text {
     @extend .ui-button-text;
 }
+span.editable {
+    width: 100%;
+    min-height: 30px;
+    margin: 0px;
+    display: block;
+}
 .gridito-table .ui-state-hover .gridito-cell {
 font-weight: normal;
 }
