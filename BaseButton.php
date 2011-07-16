@@ -29,8 +29,32 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	
 	/** @var bool */
 	private $showText = true;
+
+    /** @var string */
+    private $enabled = true;
 	
 
+	/**
+	 * Is button enabled
+	 * @param mixed row
+	 * @return bool
+     */
+    public function isEnabled($row = null)
+    {
+		return is_bool($this->enabled) ? $this->enabled : call_user_func($this->enabled, $row);
+    }
+
+    /**
+     * Set enabled
+     * @param bool $enabled
+     * @return CheckButton
+     */
+    public function SetEnabled($enabled = true)
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+    
 
 	/**
 	 * Get label
@@ -239,7 +263,12 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	 */
 	protected function createButton($row = null)
 	{
-        $button = Html::el('a')->href($this->getLink($row));
+        $button = Html::el('a');
+        if ($this->isEnabled()) {
+            $button->href($this->getLink($row));
+        } else {
+            $button->class[] = 'disabled';
+        }
         $button->class[] = 'gridito-button';
         if ($this->icon && $this->showText) {
             $button->class[] = 'button-icon-text';

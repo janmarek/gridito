@@ -16,9 +16,6 @@ class CheckButton extends BaseButton
     /** @var string */
     private $checked = false;
 
-    /** @var string */
-    private $enabled = true;
-
     /**
      * Set checked
      * @param bool $checked
@@ -30,15 +27,6 @@ class CheckButton extends BaseButton
         return $this;
     }
 
-	/**
-	 * Is button enabled
-	 * @param mixed row
-	 * @return bool
-     */
-    public function isEnabled($row = null)
-    {
-		return is_bool($this->enabled) ? $this->enabled : call_user_func($this->enabled, $row);
-    }
 
 	/**
 	 * Is button checked
@@ -50,17 +38,6 @@ class CheckButton extends BaseButton
 		return is_bool($this->checked) ? $this->checked : call_user_func($this->checked, $row);
     }
 
-    /**
-     * Set enabled
-     * @param bool $enabled
-     * @return CheckButton
-     */
-    public function SetEnabled($enabled = true)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-    
 
     /**
      * Is ajax?
@@ -112,9 +89,6 @@ class CheckButton extends BaseButton
     protected function createButton($row = null)
     {
         $el = parent::createButton($row);
-        if (!$this->isEnabled($row)) {
-            $el->href(null);
-        }
         if ($this->isChecked($row)) {
             $el->class[] = 'checked';
         }
