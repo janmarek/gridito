@@ -264,7 +264,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	protected function createButton($row = null)
 	{
         $button = Html::el('a');
-        if ($this->isEnabled()) {
+        if ($this->isEnabled($row)) {
             $button->href($this->getLink($row));
         } else {
             $button->class[] = 'disabled';
