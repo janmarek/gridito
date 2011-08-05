@@ -287,6 +287,22 @@ class Grid extends \Nette\Application\UI\Control
 			$this->model->setSorting($this->sortColumn, $this->sortType);
 		}
 
+		// better pagination thx to David Grudl (http://addons.nette.org/cs/visualpaginator)
+		$page = $this->paginator->getPage();
+		if ($this->paginator->getPageCount() < 2) {
+			$steps = array($page);
+		} else {
+			$arr = range(max($this->paginator->getFirstPage(), $page - 3), min($this->paginator->getLastPage(), $page + 3));
+			$count = 4;
+			$quotient = ($this->paginator->getPageCount() - 1) / $count;
+			for ($i = 0; $i <= $count; $i++) {
+				$arr[] = round($quotient * $i) + $this->paginator->getFirstPage();
+			}
+			sort($arr);
+			$steps = array_values(array_unique($arr));
+		}
+
+		$this->template->paginationSteps = $steps;
 		$this->template->render();
 	}
 
