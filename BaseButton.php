@@ -26,10 +26,10 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/** @var string|callback */
 	private $link = null;
-	
+
 	/** @var bool */
 	private $showText = true;
-	
+
 
 
 	/**
@@ -45,7 +45,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set label
-	 * @param string label
+	 * @param $label string label
 	 * @return BaseButton
 	 */
 	public function setLabel($label)
@@ -69,7 +69,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set jQuery UI icon
-	 * @param string icon
+	 * @param $icon string icon
 	 * @return BaseButton
 	 */
 	public function setIcon($icon)
@@ -93,15 +93,15 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set handler
-	 * @param callback handler
+	 * @param $handler callback handler
 	 * @return BaseButton
 	 */
 	public function setHandler($handler)
 	{
 		if (!is_callable($handler)) {
-			throw new \InvalidArgumentException("Handler is not callable.");
+			throw new \InvalidArgumentException('Handler is not callable.');
 		}
-		
+
 		$this->handler = $handler;
 		return $this;
 	}
@@ -123,7 +123,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Get button link
-	 * @param mixed row
+	 * @param $row mixed row
 	 * @return string
 	 */
 	protected function getLink($row = null)
@@ -150,7 +150,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Is button visible
-	 * @param mixed row
+	 * @param $row mixed row
 	 * @return bool
 	 */
 	public function isVisible($row = null)
@@ -168,15 +168,15 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	public function setVisible($visible)
 	{
 		if (!is_bool($visible) && !is_callable($visible)) {
-			throw new \InvalidArgumentException("Argument should be callable or boolean.");
+			throw new \InvalidArgumentException('Argument should be callable or boolean.');
 		}
-		
+
 		$this->visible = $visible;
 		return $this;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Show button text
 	 * @return bool
@@ -190,7 +190,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * @param bool show text
-	 * @return BaseButton 
+	 * @return BaseButton
 	 */
 	public function setShowText($showText)
 	{
@@ -199,7 +199,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	}
 
 
-	
+
 	/**
 	 * @return Grid
 	 */
@@ -220,7 +220,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 		$grid = $this->getGrid();
 
 		if ($token !== $this->getGrid()->getSecurityToken()) {
-			throw new \Nette\Application\ForbiddenRequestException("Security token does not match. Possible CSRF attack.");
+			throw new \Nette\Application\ForbiddenRequestException('Security token does not match. Possible CSRF attack.');
 		}
 
 		if ($uniqueId === null) {
@@ -239,14 +239,14 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 	 */
 	protected function createButton($row = null)
 	{
-		return Html::el("a")
+		return Html::el('a')
 			->href($this->getLink($row))
-			->data("gridito-icon", $this->icon)
-			->class(array("gridito-button", $this->showText ? null : "gridito-hide-text"))
+			->data('gridito-icon', $this->icon)
+			->class(array('gridito-button', $this->showText ? null : 'gridito-hide-text'))
 			->setText($this->label);
 	}
 
-	
+
 
 	/**
 	 * Render button

@@ -4,6 +4,7 @@ namespace Gridito;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Nette\ObjectMixin;
 
 /**
  * Doctrine QueryBuilder model
@@ -13,13 +14,16 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DoctrineQueryBuilderModel extends AbstractModel
 {
-	/** @var Doctrine\ORM\QueryBuilder */
+	/** @var \Doctrine\ORM\QueryBuilder */
 	private $qb;
+
+	/** @var array */
+	private $columnAliases = array();
 
 
 	/**
 	 * Construct
-	 * @param Doctrine\ORM\QueryBuilder query builder
+	 * @param $qb \Doctrine\ORM\QueryBuilder query builder
 	 */
 	public function __construct(QueryBuilder $qb)
 	{
@@ -44,7 +48,10 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 		list($sortColumn, $sortType) = $this->getSorting();
 		if ($sortColumn) {
-			$this->qb->orderBy($this->qb->getRootAlias() . "." . $sortColumn, $sortType);
+			if (strpos($sortColumn, '.') === FALSE) {
+				$sortColumn = $this->qb->getRootAlias() . '.' . $sortColumn;
+			}
+			$this->qb->orderBy($sortColumn, $sortType);
 		}
 
 		return $this->qb->getQuery()->getResult();
@@ -55,7 +62,33 @@ class DoctrineQueryBuilderModel extends AbstractModel
 	public function getItemByUniqueId($uniqueId)
 	{
 		$qb = clone $this->qb;
-		return $qb->andWhere($this->qb->getRootAlias() . "." . $this->getPrimaryKey() . " = " . (int) $uniqueId)->getQuery()->getSingleResult();
+		return $qb->andWhere($this->qb->getRootAlias() . '.' . $this->getPrimaryKey() . ' = ' . (int) $uniqueId)->getQuery()->getSingleResult();
 	}
-	
+
+
+
+	public function getItemValue($item, $valueName)
+	{
+		$valueNames = explode('.', $valueName);
+
+		$value = $item;
+
+		foreach ($valueNames as $valuePart) {
+			if (isset($this->columnAliases[$valuePart])) {
+				$valuePart = $this->columnAliases[$valuePart];
+			}
+
+			$value = ObjectMixin::get($value, $valuePart);
+		}
+
+		return $value;
+	}
+
+
+	public function addColumnAlias($name, $alias)
+	{
+		$this->columnAliases[$alias] = $name;
+		return $this;
+	}
+
 }

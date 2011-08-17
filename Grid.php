@@ -12,8 +12,6 @@ use Nette\ComponentModel\Container, Nette\Environment, Nette\Utils\Paginator;
  */
 class Grid extends \Nette\Application\UI\Control
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/** @var IModel */
 	private $model;
 
@@ -42,7 +40,7 @@ class Grid extends \Nette\Application\UI\Control
 	public $sortType = null;
 
 	/** @var string */
-	private $ajaxClass = "ajax";
+	private $ajaxClass = 'ajax';
 
 	/** @var bool */
 	private $highlightOrderedColumn = true;
@@ -50,28 +48,24 @@ class Grid extends \Nette\Application\UI\Control
 	/** @var string|callable */
 	private $rowClass = null;
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="constructor">
 
 	public function __construct(\Nette\ComponentModel\IContainer $parent = null, $name = null)
 	{
 		parent::__construct($parent, $name);
 
-		$this->addComponent(new Container, "toolbar");
-		$this->addComponent(new Container, "actions");
-		$this->addComponent(new Container, "columns");
+		$this->addComponent(new Container, 'toolbar');
+		$this->addComponent(new Container, 'actions');
+		$this->addComponent(new Container, 'columns');
 
 		$this->paginator = new Paginator;
 		$this->paginator->setItemsPerPage($this->defaultItemsPerPage);
 	}
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	/**
-	 * @param bool highlight ordered column
+	 * @param $highlightOrderedColumn bool highlight ordered column
 	 * @return Grid
 	 */
 	public function setHighlightOrderedColumn($highlightOrderedColumn)
@@ -126,7 +120,7 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Set model
-	 * @param IModel model
+	 * @param $model IModel model
 	 * @return Grid
 	 */
 	public function setModel(IModel $model)
@@ -152,7 +146,7 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Set items per page
-	 * @param int items per page
+	 * @param $itemsPerPage int items per page
 	 * @return Grid
 	 */
 	public function setItemsPerPage($itemsPerPage)
@@ -176,7 +170,7 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Set ajax class
-	 * @param string ajax class
+	 * @param $ajaxClass string ajax class
 	 * @return Grid
 	 */
 	public function setAjaxClass($ajaxClass)
@@ -204,7 +198,7 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	public function getSecurityToken()
 	{
-		$session = Environment::getSession(__CLASS__ . "-" . __METHOD__);
+		$session = Environment::getSession(__CLASS__ . '-' . __METHOD__);
 
 		if (empty($session->securityToken)) {
 			$session->securityToken = md5(uniqid(mt_rand(), true));
@@ -221,7 +215,7 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	public function hasToolbar()
 	{
-		return count($this["toolbar"]->getComponents()) > 0;
+		return count($this['toolbar']->getComponents()) > 0;
 	}
 
 
@@ -232,16 +226,14 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	public function hasActions()
 	{
-		return count($this["actions"]->getComponents()) > 0;
+		return count($this['actions']->getComponents()) > 0;
 	}
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="signals">
 
 	/**
 	 * Handle change page signal
-	 * @param int page
+	 * @param $page int page
 	 */
 	public function handleChangePage($page)
 	{
@@ -259,9 +251,7 @@ class Grid extends \Nette\Application\UI\Control
 		}
 	}
 
-	// </editor-fold>
 
-	// <editor-fold defaultstate="collapsed" desc="rendering">
 
 	/**
 	 * Create template
@@ -269,7 +259,7 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	protected function createTemplate($class = null)
 	{
-		return parent::createTemplate()->setFile(__DIR__ . "/templates/grid.phtml");
+		return parent::createTemplate()->setFile(__DIR__ . '/templates/grid.phtml');
 	}
 
 
@@ -283,8 +273,8 @@ class Grid extends \Nette\Application\UI\Control
 		$this->model->setLimit($this->paginator->getLength());
 		$this->model->setOffset($this->paginator->getOffset());
 
-		if ($this->sortColumn && $this["columns"]->getComponent($this->sortColumn)->isSortable()) {
-			$this->model->setSorting($this->sortColumn, $this->sortType);
+		if ($this->sortColumn && $this['columns']->getComponent($this->sortColumn)->isSortable()) {
+			$this->model->setSorting($this['columns']->getComponent($this->sortColumn)->getColumnName(), $this->sortType);
 		}
 
 		// better pagination thx to David Grudl (http://addons.nette.org/cs/visualpaginator)
@@ -306,19 +296,21 @@ class Grid extends \Nette\Application\UI\Control
 		$this->template->render();
 	}
 
-	// </editor-fold>
 
 
 	/**
 	 * Add column
-	 * @param string name
-	 * @param string label
-	 * @param array options
+	 * @param $name string name
+	 * @param $label string label
+	 * @param $options array options
 	 * @return Column
 	 */
 	public function addColumn($name, $label = null, array $options = array())
 	{
-		$column = new Column($this["columns"], $name);
+		$componentName = \Nette\Utils\Strings::webalize($name);
+		$componentName = strtr($componentName, '-', '_');
+		$column = new Column($this['columns'], $componentName);
+		$column->setColumnName($name);
 		$column->setLabel($label);
 		$this->setOptions($column, $options);
 		return $column;
@@ -328,14 +320,14 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Add action button
-	 * @param string button name
-	 * @param string label
-	 * @param array options
+	 * @param $name string button name
+	 * @param $label string label
+	 * @param $options array options
 	 * @return Button
 	 */
 	public function addButton($name, $label = null, array $options = array())
 	{
-		$button = new Button($this["actions"], $name);
+		$button = new Button($this['actions'], $name);
 		$button->setLabel($label);
 		$this->setOptions($button, $options);
 		return $button;
@@ -345,14 +337,14 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Add window button
-	 * @param string button name
-	 * @param string label
-	 * @param array options
+	 * @param $name string button name
+	 * @param $label string label
+	 * @param $options array options
 	 * @return WindowButton
 	 */
 	public function addWindowButton($name, $label = null, array $options = array())
 	{
-		$button = new WindowButton($this["actions"], $name);
+		$button = new WindowButton($this['actions'], $name);
 		$button->setLabel($label);
 		$this->setOptions($button, $options);
 		return $button;
@@ -362,14 +354,14 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Add action button to toolbar
-	 * @param string button name
-	 * @param string label
-	 * @param array options
+	 * @param $name string button name
+	 * @param $label string label
+	 * @param $options array options
 	 * @return Button
 	 */
 	public function addToolbarButton($name, $label = null, array $options = array())
 	{
-		$button = new Button($this["toolbar"], $name);
+		$button = new Button($this['toolbar'], $name);
 		$button->setLabel($label);
 		$this->setOptions($button, $options);
 		return $button;
@@ -379,14 +371,14 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Add window button to toolbar
-	 * @param string button name
-	 * @param string label
-	 * @param array options
+	 * @param $name string button name
+	 * @param $label string label
+	 * @param $options array options
 	 * @return WindowButton
 	 */
 	public function addToolbarWindowButton($name, $label = null, array $options = array())
 	{
-		$button = new WindowButton($this["toolbar"], $name);
+		$button = new WindowButton($this['toolbar'], $name);
 		$button->setLabel($label);
 		$this->setOptions($button, $options);
 		return $button;
@@ -396,7 +388,7 @@ class Grid extends \Nette\Application\UI\Control
 
 	/**
 	 * Set page
-	 * @param int page
+	 * @param $page int page
 	 */
 	private function setPage($page)
 	{
@@ -408,7 +400,7 @@ class Grid extends \Nette\Application\UI\Control
 	protected function setOptions($object, $options)
 	{
 		foreach	($options as $option => $value) {
-			$method = "set" . ucfirst($option);
+			$method = 'set' . ucfirst($option);
 			if (method_exists($object, $method)) {
 				$object->$method($value);
 			} else {

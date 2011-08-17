@@ -22,10 +22,10 @@ class DibiFluentModel extends AbstractModel
 
 	/**
 	 * Constructor
-	 * @param DibiFluent dibi fluent object
-	 * @param string row class name
+	 * @param $fluent \DibiFluent dibi fluent object
+	 * @param $rowClass string row class name
 	 */
-	public function __construct(DibiFluent $fluent, $rowClass = "DibiRow")
+	public function __construct(DibiFluent $fluent, $rowClass = 'DibiRow')
 	{
 		$this->fluent = $fluent;
 		$this->rowClass = $rowClass;
@@ -36,7 +36,7 @@ class DibiFluentModel extends AbstractModel
 	public function getItemByUniqueId($uniqueId)
 	{
 		$fluent = clone $this->fluent;
-		$fluent->where("%n = %i", $this->getPrimaryKey(), $uniqueId);
+		$fluent->where('%n = %i', $this->getPrimaryKey(), $uniqueId);
 		return $fluent->execute()->setRowClass($this->rowClass)->fetch();
 	}
 
@@ -66,6 +66,13 @@ class DibiFluentModel extends AbstractModel
 	protected function _count()
 	{
 		return $this->fluent->count();
+	}
+
+
+
+	public function getItemValue($item, $valueName)
+	{
+		return $item->$valueName;
 	}
 
 }

@@ -54,7 +54,7 @@
                 </thead>
                 <tbody>
                     {block tablebody}
-                    <tr n:foreach="$control->getModel() as $item" n:class="$control->getRowClass($iterator, $item)">
+                    <tr n:foreach="$control->getModel()->getItems() as $item" n:class="$control->getRowClass($iterator, $item)">
                         <td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->getHighlightOrderedColumn() && $column->getSorting() ? ui-state-highlight" n:foreach="$control['columns']->getComponents() as $column">
                             {control $column:cell $item}
                         </td>

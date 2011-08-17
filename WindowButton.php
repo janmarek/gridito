@@ -14,10 +14,10 @@ class WindowButton extends BaseButton
 {
 	/**
 	 * Handle click signal
-	 * @param string security token
-	 * @param mixed primary key
+	 * @param $token string security token
+	 * @param $uniqueId mixed primary key
 	 */
-	public function handleClick($token, $uniqueId = null) {		
+	public function handleClick($token, $uniqueId = null) {
 		ob_start();
 		parent::handleClick($token, $uniqueId);
 		$output = ob_get_clean();
@@ -34,13 +34,13 @@ class WindowButton extends BaseButton
 
 	/**
 	 * Create button element
-	 * @param mixed row
+	 * @param $row mixed row
 	 * @return \Nette\Web\Html
 	 */
 	protected function createButton($row = null) {
 		$el = parent::createButton($row);
-		$el->class[] = "gridito-window-button";
-		$el->data("gridito-window-title", $this->getLabel());
+		$el->class[] = 'gridito-window-button';
+		$el->data('gridito-window-title', $this->getLabel());
 		return $el;
 	}
 

@@ -15,8 +15,8 @@ class Button extends BaseButton
 
 	/** @var string|callback|null */
 	private $confirmationQuestion = null;
-	
-	
+
+
 
 	/**
 	 * Is ajax?
@@ -31,7 +31,7 @@ class Button extends BaseButton
 
 	/**
 	 * Set ajax mode
-	 * @param bool ajax
+	 * @param $ajax bool ajax
 	 * @return Button
 	 */
 	public function setAjax($ajax)
@@ -44,7 +44,7 @@ class Button extends BaseButton
 
 	/**
 	 * Get confirmation question
-	 * @param mixed row
+	 * @param $row mixed row
 	 * @return string|callback|null
 	 */
 	public function getConfirmationQuestion($row)
@@ -60,7 +60,7 @@ class Button extends BaseButton
 
 	/**
 	 * Set confirmation question
-	 * @param string|callback|null confirmation question
+	 * @param $confirmationQuestion string|callback|null confirmation question
 	 * @return Button
 	 */
 	public function setConfirmationQuestion($confirmationQuestion)
@@ -69,12 +69,12 @@ class Button extends BaseButton
 		return $this;
 	}
 
-	
+
 
 	/**
 	 * Handle click signal
-	 * @param string security token
-	 * @param mixed primary key
+	 * @param $token string security token
+	 * @param $uniqueId mixed primary key
 	 */
 	public function handleClick($token, $uniqueId = null)
 	{
@@ -83,7 +83,7 @@ class Button extends BaseButton
 		if ($this->getPresenter()->isAjax()) {
 			$this->getGrid()->invalidateControl();
 		} else {
-			$this->getGrid()->redirect("this");
+			$this->getGrid()->redirect('this');
 		}
 	}
 
@@ -91,15 +91,15 @@ class Button extends BaseButton
 
 	/**
 	 * Create button element
-	 * @param mixed row
+	 * @param $row mixed row
 	 * @return Nette\Web\Html
 	 */
 	protected function createButton($row = null)
 	{
 		$el = parent::createButton($row);
 		$el->class[] = $this->isAjax() ? $this->getGrid()->getAjaxClass() : null;
-		$el->data("gridito-question", $this->getConfirmationQuestion($row));
-		
+		$el->data('gridito-question', $this->getConfirmationQuestion($row));
+
 		return $el;
 	}
 

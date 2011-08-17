@@ -2,8 +2,6 @@
 
 namespace Gridito;
 
-use ArrayIterator;
-
 /**
  * Abstract Gridito model
  *
@@ -22,7 +20,7 @@ abstract class AbstractModel implements IModel
 	private $sorting = array(null, null);
 
 	/** @var string */
-	private $primaryKey = "id";
+	private $primaryKey = 'id';
 
 	/** @var int */
 	private $count = null;
@@ -63,8 +61,9 @@ abstract class AbstractModel implements IModel
 
 	/**
 	 * Set sorting
-	 * @param string column
-	 * @param string asc or desc
+	 * @param $column string column
+	 * @param $type string asc or desc
+	 * @return array
 	 */
 	public function setSorting($column, $type)
 	{
@@ -94,13 +93,6 @@ abstract class AbstractModel implements IModel
 
 
 
-	public function getIterator()
-	{
-		return new ArrayIterator($this->getItems());
-	}
-
-
-
 	public function getUniqueId($item)
 	{
 		return $item->{$this->getPrimaryKey()};
@@ -110,7 +102,7 @@ abstract class AbstractModel implements IModel
 
 	public function getItemsByUniqueIds(array $uniqueIds)
 	{
-		return array_map(array($this, "getItemByUniqueId"), $uniqueIds);
+		return array_map(array($this, 'getItemByUniqueId'), $uniqueIds);
 	}
 
 

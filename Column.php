@@ -10,8 +10,6 @@ namespace Gridito;
  */
 class Column extends \Nette\Application\UI\Control
 {
-	// <editor-fold defaultstate="collapsed" desc="variables">
-
 	/** @var string */
 	private $label;
 
@@ -27,9 +25,10 @@ class Column extends \Nette\Application\UI\Control
 	/** @var string|callable */
 	private $cellClass = null;
 
-	// </editor-fold>
+	/** @var string */
+	private $columnName;
 
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
+
 
 	public function setCellClass($class)
 	{
@@ -65,7 +64,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set label
-	 * @param string label
+	 * @param $label string label
 	 * @return Column
 	 */
 	public function setLabel($label)
@@ -89,7 +88,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set cell renderer
-	 * @param callback cell renderer
+	 * @param $cellRenderer callback cell renderer
 	 * @return Column
 	 */
 	public function setRenderer($cellRenderer)
@@ -112,7 +111,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set sortable
-	 * @param bool sortable
+	 * @param $sortable bool sortable
 	 * @return Column
 	 */
 	public function setSortable($sortable) {
@@ -150,7 +149,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set date/time format
-	 * @param string datetime format
+	 * @param $dateTimeFormat string datetime format
 	 * @return Column
 	 */
 	public function setDateTimeFormat($dateTimeFormat) {
@@ -172,7 +171,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Render boolean
-	 * @param bool value
+	 * @param $value bool value
 	 */
 	public static function renderBoolean($value)
 	{
@@ -184,8 +183,8 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Render datetime
-	 * @param Datetime value
-	 * @param string datetime format
+	 * @param $value Datetime value
+	 * @param $format string datetime format
 	 */
 	public static function renderDateTime($value, $format)
 	{
@@ -201,7 +200,7 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public function defaultCellRenderer($record, $column) {
 		$name = $column->getName();
-		$value = $record->$name;
+		$value = $this->getGrid()->getModel()->getItemValue($record, $this->columnName);
 
 		// boolean
 		if (is_bool($value)) {
@@ -221,10 +220,30 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Render cell
-	 * @param mixed record
+	 * @param $record mixed record
 	 */
 	public function renderCell($record) {
 		call_user_func($this->renderer ?: array($this, 'defaultCellRenderer'), $record, $this);
+	}
+
+
+
+	/**
+	 * @param string $columnName
+	 */
+	public function setColumnName($columnName)
+	{
+		$this->columnName = $columnName;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getColumnName()
+	{
+		return $this->columnName;
 	}
 
 }
