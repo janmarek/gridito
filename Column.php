@@ -22,7 +22,7 @@ class Column extends \Nette\Application\UI\Control
 	private $sortable = false;
 
 	/** @var string */
-	private $dateTimeFormat = "j.n.Y G:i";
+	private $dateTimeFormat = 'j.n.Y G:i';
 
 	/** @var string|callable */
 	private $cellClass = null;
@@ -176,7 +176,7 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public static function renderBoolean($value)
 	{
-		$icon = $value ? "check" : "closethick";
+		$icon = $value ? 'check' : 'closethick';
 		echo '<span class="ui-icon ui-icon-' . $icon . '"></span>';
 	}
 
@@ -213,7 +213,7 @@ class Column extends \Nette\Application\UI\Control
 
 		// other
 		} else {
-			echo $value;
+			echo htmlspecialchars($value, ENT_NOQUOTES);
 		}
 	}
 
@@ -224,7 +224,7 @@ class Column extends \Nette\Application\UI\Control
 	 * @param mixed record
 	 */
 	public function renderCell($record) {
-		call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
+		call_user_func($this->renderer ?: array($this, 'defaultCellRenderer'), $record, $this);
 	}
 
 }
