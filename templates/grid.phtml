@@ -55,7 +55,7 @@
                 <tbody>
                     {block tablebody}
                     <tr n:foreach="$control->getModel()->getItems() as $item" n:class="$control->getRowClass($iterator, $item)">
-                        <td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->getHighlightOrderedColumn() && $column->getSorting() ? ui-state-highlight" n:foreach="$control['columns']->getComponents() as $column">
+                        <td n:class="gridito-cell, $column->getCellClass($iterator, item), $control->isColumnHighlighted($column) ? ui-state-highlight" n:foreach="$control['columns']->getComponents() as $column">
                             {control $column:cell $item}
                         </td>
                         <td class="gridito-actioncell" n:if="$control->hasActions()" n:inner-foreach="$control['actions']->getComponents() as $button">

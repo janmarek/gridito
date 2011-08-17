@@ -23,7 +23,7 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 	/**
 	 * Construct
-	 * @param $qb \Doctrine\ORM\QueryBuilder query builder
+	 * @param \Doctrine\ORM\QueryBuilder $qb query builder
 	 */
 	public function __construct(QueryBuilder $qb)
 	{

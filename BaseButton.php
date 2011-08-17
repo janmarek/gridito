@@ -45,7 +45,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set label
-	 * @param $label string label
+	 * @param string $label label
 	 * @return BaseButton
 	 */
 	public function setLabel($label)
@@ -69,7 +69,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set jQuery UI icon
-	 * @param $icon string icon
+	 * @param string $icon icon
 	 * @return BaseButton
 	 */
 	public function setIcon($icon)
@@ -93,7 +93,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set handler
-	 * @param $handler callback handler
+	 * @param callback $handler handler
 	 * @return BaseButton
 	 */
 	public function setHandler($handler)
@@ -110,7 +110,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set link URL
-	 * @param string|callback link
+	 * @param string|callback $link link
 	 * @return BaseButton
 	 */
 	public function setLink($link)
@@ -123,7 +123,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Get button link
-	 * @param $row mixed row
+	 * @param mixed $row row
 	 * @return string
 	 */
 	protected function getLink($row = null)
@@ -150,7 +150,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Is button visible
-	 * @param $row mixed row
+	 * @param mixed $row row
 	 * @return bool
 	 */
 	public function isVisible($row = null)
@@ -162,7 +162,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Set visible
-	 * @param bool|callback visible
+	 * @param bool|callback $visible visible
 	 * @return BaseButton
 	 */
 	public function setVisible($visible)
@@ -189,7 +189,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 
 	/**
-	 * @param bool show text
+	 * @param bool $showText show text
 	 * @return BaseButton
 	 */
 	public function setShowText($showText)
@@ -212,8 +212,8 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Handle click signal
-	 * @param string security token
-	 * @param mixed primary key
+	 * @param string $token security token
+	 * @param mixed $uniqueId primary key
 	 */
 	public function handleClick($token, $uniqueId = null)
 	{
@@ -234,7 +234,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Create button element
-	 * @param mixed row
+	 * @param mixed $row row
 	 * @return Nette\Web\Html
 	 */
 	protected function createButton($row = null)
@@ -250,7 +250,7 @@ abstract class BaseButton extends \Nette\Application\UI\PresenterComponent
 
 	/**
 	 * Render button
-	 * @param mixed row
+	 * @param mixed $row row
 	 */
 	public function render($row = null)
 	{

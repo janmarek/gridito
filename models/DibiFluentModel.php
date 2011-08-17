@@ -22,8 +22,8 @@ class DibiFluentModel extends AbstractModel
 
 	/**
 	 * Constructor
-	 * @param $fluent \DibiFluent dibi fluent object
-	 * @param $rowClass string row class name
+	 * @param \DibiFluent $fluent dibi fluent object
+	 * @param string $rowClass row class name
 	 */
 	public function __construct(DibiFluent $fluent, $rowClass = 'DibiRow')
 	{

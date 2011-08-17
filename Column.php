@@ -64,7 +64,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set label
-	 * @param $label string label
+	 * @param string $label label
 	 * @return Column
 	 */
 	public function setLabel($label)
@@ -88,7 +88,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set cell renderer
-	 * @param $cellRenderer callback cell renderer
+	 * @param callback $cellRenderer cell renderer
 	 * @return Column
 	 */
 	public function setRenderer($cellRenderer)
@@ -111,7 +111,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set sortable
-	 * @param $sortable bool sortable
+	 * @param bool $sortable sortable
 	 * @return Column
 	 */
 	public function setSortable($sortable) {
@@ -127,12 +127,15 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public function getSorting()
 	{
-		$grid = $this->getGrid();
-		if ($grid->sortColumn === $this->getName()) {
-			return $grid->sortType;
-		} else {
-			return null;
+		$sorting = $this->getGrid()->getSorting();
+
+		if ($sorting === NULL) {
+			return NULL;
 		}
+
+		list($column, $type) = $sorting;
+
+		return $column === $this->columnName ? $type: NULL;
 	}
 
 
@@ -149,7 +152,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Set date/time format
-	 * @param $dateTimeFormat string datetime format
+	 * @param string $dateTimeFormat datetime format
 	 * @return Column
 	 */
 	public function setDateTimeFormat($dateTimeFormat) {
@@ -167,11 +170,11 @@ class Column extends \Nette\Application\UI\Control
 		return $this->getParent()->getParent();
 	}
 
-	// </editor-fold>
+
 
 	/**
 	 * Render boolean
-	 * @param $value bool value
+	 * @param bool $value value
 	 */
 	public static function renderBoolean($value)
 	{
@@ -183,8 +186,8 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Render datetime
-	 * @param $value Datetime value
-	 * @param $format string datetime format
+	 * @param \Datetime $value value
+	 * @param string $format datetime format
 	 */
 	public static function renderDateTime($value, $format)
 	{
@@ -199,7 +202,6 @@ class Column extends \Nette\Application\UI\Control
 	 * @param Column $column
 	 */
 	public function defaultCellRenderer($record, $column) {
-		$name = $column->getName();
 		$value = $this->getGrid()->getModel()->getItemValue($record, $this->columnName);
 
 		// boolean
@@ -220,7 +222,7 @@ class Column extends \Nette\Application\UI\Control
 
 	/**
 	 * Render cell
-	 * @param $record mixed record
+	 * @param mixed $record record
 	 */
 	public function renderCell($record) {
 		call_user_func($this->renderer ?: array($this, 'defaultCellRenderer'), $record, $this);

@@ -14,8 +14,8 @@ class WindowButton extends BaseButton
 {
 	/**
 	 * Handle click signal
-	 * @param $token string security token
-	 * @param $uniqueId mixed primary key
+	 * @param string $token security token
+	 * @param mixed $uniqueId primary key
 	 */
 	public function handleClick($token, $uniqueId = null) {
 		ob_start();
@@ -34,7 +34,7 @@ class WindowButton extends BaseButton
 
 	/**
 	 * Create button element
-	 * @param $row mixed row
+	 * @param mixed $row row
 	 * @return \Nette\Web\Html
 	 */
 	protected function createButton($row = null) {

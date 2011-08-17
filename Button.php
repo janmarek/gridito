@@ -31,7 +31,7 @@ class Button extends BaseButton
 
 	/**
 	 * Set ajax mode
-	 * @param $ajax bool ajax
+	 * @param bool $ajax ajax
 	 * @return Button
 	 */
 	public function setAjax($ajax)
@@ -44,7 +44,7 @@ class Button extends BaseButton
 
 	/**
 	 * Get confirmation question
-	 * @param $row mixed row
+	 * @param mixed $row row
 	 * @return string|callback|null
 	 */
 	public function getConfirmationQuestion($row)
@@ -60,7 +60,7 @@ class Button extends BaseButton
 
 	/**
 	 * Set confirmation question
-	 * @param $confirmationQuestion string|callback|null confirmation question
+	 * @param string|callback|null $confirmationQuestion confirmation question
 	 * @return Button
 	 */
 	public function setConfirmationQuestion($confirmationQuestion)
@@ -73,8 +73,8 @@ class Button extends BaseButton
 
 	/**
 	 * Handle click signal
-	 * @param $token string security token
-	 * @param $uniqueId mixed primary key
+	 * @param string $token security token
+	 * @param mixed $uniqueId primary key
 	 */
 	public function handleClick($token, $uniqueId = null)
 	{
@@ -91,7 +91,7 @@ class Button extends BaseButton
 
 	/**
 	 * Create button element
-	 * @param $row mixed row
+	 * @param mixed $row row
 	 * @return Nette\Web\Html
 	 */
 	protected function createButton($row = null)

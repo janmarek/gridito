@@ -61,8 +61,8 @@ abstract class AbstractModel implements IModel
 
 	/**
 	 * Set sorting
-	 * @param $column string column
-	 * @param $type string asc or desc
+	 * @param string $column column
+	 * @param string $type asc or desc
 	 * @return array
 	 */
 	public function setSorting($column, $type)
