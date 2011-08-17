@@ -37,7 +37,7 @@ class WindowButton extends BaseButton
 	 * @param mixed $row row
 	 * @return \Nette\Web\Html
 	 */
-	protected function createButton($row = null) {
+	public function createButton($row = null) {
 		$el = parent::createButton($row);
 		$el->class[] = 'gridito-window-button';
 		$el->data('gridito-window-title', $this->getLabel());
