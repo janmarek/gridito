@@ -48,7 +48,9 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 		list($sortColumn, $sortType) = $this->getSorting();
 		if ($sortColumn) {
-			if (strpos($sortColumn, '.') === FALSE) {
+            if (isset($this->columnAliases[$sortColumn])) {
+                $sortColumn = $this->columnAliases[$sortColumn]->qbName;
+            } else {
 				$sortColumn = $this->qb->getRootAlias() . '.' . $sortColumn;
 			}
 			$this->qb->orderBy($sortColumn, $sortType);
@@ -69,25 +71,37 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 	public function getItemValue($item, $valueName)
 	{
-		$valueNames = explode('.', $valueName);
+        if (isset($this->columnAliases[$valueName])) {
+            $getterPath = $this->columnAliases[$valueName]->getterPath;
+        } else {
+            $getterPath = $valueName;
+        }
+
+		$getters = explode('.', $getterPath);
 
 		$value = $item;
 
-		foreach ($valueNames as $valuePart) {
-			if (isset($this->columnAliases[$valuePart])) {
-				$valuePart = $this->columnAliases[$valuePart];
-			}
-
-			$value = ObjectMixin::get($value, $valuePart);
+		foreach ($getters as $getter) {
+			$value = ObjectMixin::get($value, $getter);
 		}
 
 		return $value;
 	}
 
 
-	public function addColumnAlias($name, $alias)
+    /**
+     * @param string $columnName column name in gridito
+     * @param string $getterPath name for getting a value for default renderer (e.g. "image.name" is translated to $entity->getImage()->getName())
+     * @param string $qbName name for doctrine query builder (used for ordering)
+     * @return \Gridito\DoctrineQueryBuilderModel
+     */
+	public function addColumnAliases($columnName, $getterPath, $qbName)
 	{
-		$this->columnAliases[$alias] = $name;
+		$this->columnAliases[$columnName] = (object) array(
+            'getterPath' => $getterPath,
+            'qbName' => $qbName,
+        );
+
 		return $this;
 	}
 
