@@ -15,10 +15,10 @@ use Nette\ObjectMixin;
 class DoctrineQueryBuilderModel extends AbstractModel
 {
 	/** @var \Doctrine\ORM\QueryBuilder */
-	private $qb;
+	protected $qb;
 
 	/** @var array */
-	private $columnAliases = array();
+	protected $columnAliases = array();
 
 
 	/**
@@ -48,9 +48,9 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 		list($sortColumn, $sortType) = $this->getSorting();
 		if ($sortColumn) {
-            if (isset($this->columnAliases[$sortColumn])) {
-                $sortColumn = $this->columnAliases[$sortColumn]->qbName;
-            } else {
+			if (isset($this->columnAliases[$sortColumn])) {
+				$sortColumn = $this->columnAliases[$sortColumn]->qbName;
+			} else {
 				$sortColumn = $this->qb->getRootAlias() . '.' . $sortColumn;
 			}
 			$this->qb->orderBy($sortColumn, $sortType);
@@ -71,11 +71,11 @@ class DoctrineQueryBuilderModel extends AbstractModel
 
 	public function getItemValue($item, $valueName)
 	{
-        if (isset($this->columnAliases[$valueName])) {
-            $getterPath = $this->columnAliases[$valueName]->getterPath;
-        } else {
-            $getterPath = $valueName;
-        }
+		if (isset($this->columnAliases[$valueName])) {
+			$getterPath = $this->columnAliases[$valueName]->getterPath;
+		} else {
+			$getterPath = $valueName;
+		}
 
 		$getters = explode('.', $getterPath);
 
@@ -89,18 +89,18 @@ class DoctrineQueryBuilderModel extends AbstractModel
 	}
 
 
-    /**
-     * @param string $columnName column name in gridito
-     * @param string $getterPath name for getting a value for default renderer (e.g. "image.name" is translated to $entity->getImage()->getName())
-     * @param string $qbName name for doctrine query builder (used for ordering)
-     * @return \Gridito\DoctrineQueryBuilderModel
-     */
+	/**
+	 * @param string $columnName column name in gridito
+	 * @param string $getterPath name for getting a value for default renderer (e.g. "image.name" is translated to $entity->getImage()->getName())
+	 * @param string $qbName name for doctrine query builder (used for ordering)
+	 * @return \Gridito\DoctrineQueryBuilderModel
+	 */
 	public function addColumnAliases($columnName, $getterPath, $qbName)
 	{
 		$this->columnAliases[$columnName] = (object) array(
-            'getterPath' => $getterPath,
-            'qbName' => $qbName,
-        );
+			'getterPath' => $getterPath,
+			'qbName' => $qbName,
+		);
 
 		return $this;
 	}
