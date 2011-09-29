@@ -266,7 +266,11 @@ class Column extends \Nette\Application\UI\Control
 	public static function renderBoolean($value)
 	{
 		$icon = $value ? "check" : "closethick";
-		return '<span class="ui-icon ui-icon-' . $icon . '"></span>';
+        $el = Html::el('span');
+        $el->data['value'] = $value ? '1' : '0';
+        $el->data['type']  = 'bool';
+        $el->add(Html::el("span class='ui-icon ui-icon-$icon'"));
+        return $el;
 	}
 
 
@@ -341,15 +345,7 @@ class Column extends \Nette\Application\UI\Control
 			if (!is_null($this->format)) {
 				$value = Grid::formatRecordString($record, $this->format);
 			}
-			$return = self::renderText($value, $this->maxlen);
-            if ($this->editable) {
-                $return->class[] = 'editable';
-                $return->data['value'] = $value;
-                $return->data['url'] = $this->getGrid()->link('edit!');
-                $return->data['name'] = $this->getName();
-                $return->data['id'] = $this->getGrid()->getModel()->getUniqueId($record);
-            }
-            return $return;
+			return self::renderText($value, $this->maxlen);
 		}
 	}
 
@@ -360,7 +356,20 @@ class Column extends \Nette\Application\UI\Control
 	 * @param mixed record
 	 */
 	public function renderCell($record) {
-		echo call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
+		$column = call_user_func($this->renderer ?: array($this, "defaultCellRenderer"), $record, $this);
+        if (!($column instanceOf Html)) {
+            $column = Html::el('span')->setText($column);
+        }
+        if ($this->editable) {
+            $column->class[] = 'editable';
+            if (!isset($column->data['value'])) {
+                $column->data['value'] = $column->getText();
+            }
+            $column->data['url'] = $this->getGrid()->link('edit!');
+            $column->data['name'] = $this->getName();
+            $column->data['id'] = $this->getGrid()->getModel()->getUniqueId($record);
+        }
+        echo $column;
 	}
 
 }

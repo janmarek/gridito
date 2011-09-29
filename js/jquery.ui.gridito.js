@@ -21,7 +21,8 @@ $.widget("ui.gridito", {
 					win.attr("title", $(this).attr("data-gridito-window-title"));
 					win.load(this.href, function () {
 						win.dialog({
-							modal: true
+							modal: true,
+                            width: 600
 						});
 						win.find("input:first").focus();
 					});
@@ -56,6 +57,13 @@ $.extend({
         who.replaceWith(span);
                },
     startedit: function(who) {
+        if (who.attr('data-type') == 'bool') {
+            var data = {};
+            data[who.attr('data-name')] = who.attr('data-value') === '1' ? '0' : '1';
+            data['id'] = who.attr('data-id');
+            $.post(who.attr('data-url'), data);
+            return;
+        }
         var input = $('<input type="text"></input>');
         input.data('span', who);
         input.val(who.attr('data-value'));
