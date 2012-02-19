@@ -25,12 +25,6 @@ class Grid extends \Nette\Application\UI\Control
 	private $defaultItemsPerPage = 20;
 
 	/**
-	 * @var int
-	 * @persistent
-	 */
-	public $page = 1;
-
-	/**
 	 * @var string
 	 * @persistent
 	 */
@@ -54,9 +48,6 @@ class Grid extends \Nette\Application\UI\Control
     /** @var callable */
     private $editHandler = null;
 
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="constructor">
 
 	public function __construct(\Nette\ComponentModel\IContainer $parent = null, $name = null)
 	{
@@ -65,8 +56,10 @@ class Grid extends \Nette\Application\UI\Control
 		$this->addComponent(new Container, "toolbar");
 		$this->addComponent(new Container, "actions");
 		$this->addComponent(new Container, "columns");
+        $this->addComponent(new \VisualPaginator, 'visualPaginator');
+        $this['visualPaginator']->onChange[] = callback($this, 'invalidateControl');
 
-		$this->paginator = new Paginator;
+		$this->paginator = $this['visualPaginator']->getPaginator();
 		$this->paginator->setItemsPerPage($this->defaultItemsPerPage);
 	}
 
@@ -79,9 +72,6 @@ class Grid extends \Nette\Application\UI\Control
 			});
 	}
 
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="getters & setters">
 
 	/**
 	 * @param bool highlight ordered column
@@ -248,20 +238,6 @@ class Grid extends \Nette\Application\UI\Control
 		return count($this["actions"]->getComponents()) > 0;
 	}
 
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="signals">
-
-	/**
-	 * Handle change page signal
-	 * @param int page
-	 */
-	public function handleChangePage($page)
-	{
-		if ($this->presenter->isAjax()) {
-			$this->invalidateControl();
-		}
-	}
 
     /**
      * Set edit handler
@@ -299,11 +275,9 @@ class Grid extends \Nette\Application\UI\Control
 		if ($this->presenter->isAjax()) {
 			$this->invalidateControl();
 		}
+        $this->paginator->page = 1;
 	}
 
-	// </editor-fold>
-
-	// <editor-fold defaultstate="collapsed" desc="rendering">
 
 	/**
 	 * Create template
@@ -321,18 +295,17 @@ class Grid extends \Nette\Application\UI\Control
 	 */
 	public function render()
 	{
-		$this->paginator->setPage($this->page);
 		$this->model->setLimit($this->paginator->getLength());
 		$this->model->setOffset($this->paginator->getOffset());
 
 		if ($this->sortColumn && $this["columns"]->getComponent($this->sortColumn)->isSortable()) {
 			$this->model->setSorting($this->sortColumn, $this->sortType);
 		}
+        $this['visualPaginator']->setClass(array('paginator', $this->ajaxClass));
 
 		$this->template->render();
 	}
 
-	// </editor-fold>
 
 
 	/**
