@@ -41,6 +41,9 @@ class Column extends \Nette\Application\UI\Control
 	/** @var string */
 	private $format = null;
 
+    /** @var string */
+    public $spamProtection = null;
+
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="getters & setters">
@@ -308,11 +311,23 @@ class Column extends \Nette\Application\UI\Control
 	 */
 	public static function renderEmail($email, $maxlen)
 	{
-		$el = Html::el('a')->href('mailto:' . $email);
+        if (is_null($this->spamProtection) {
+            $href = $email;
+            $text = htmlspecialchars($email, ENT_QUOTES);
+        } else {
+            $href = str_replace('@', $this->spamProtection, $email);
+            $text = str_replace('@',
+                '@<span style="display:none;">'
+                . $this->spamProtection
+                . '</span>',
+                htmlspecialchars($email, ENT_QUOTES)
+            );
+        }
+		$el = Html::el('a')->href('mailto:' . $href);
 		if (is_null($maxlen) || Strings::length($email) < $maxlen) {
-			return $el->setText($email);
+			return $el->setHtml($text);
 		} else {
-			return $el->title($email)
+			return $el->title($href)
 				->setText(Strings::truncate($email, $maxlen));
 		}
 	}
